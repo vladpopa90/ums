@@ -1,0 +1,12 @@
+<div>
+    <h2>Add new groups:</h2>
+    <label for="groupname">New Group Name</label>
+    <input type="text" name="newGroupName" [(ngModel)]="newGroupName" #username="ngModel" required />
+    <button (click)="addGroup()">Add Group</button>
+</div>
+
+<ul>
+    <li *ngFor="let group of groups">{{group.name}}<button (click)="removeGroup(group.id)">Remove</button></li>
+</ul>
+
+<p><a [routerLink]="['/login']" (click)="logout()">Logout</a></p>
