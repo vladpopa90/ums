@@ -45,7 +45,7 @@ public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter {
 //		http.csrf().disable().authorizeRequests().antMatchers("/login").permitAll().anyRequest().authenticated().and()
 //				.httpBasic();
 //	}
-	private static final RequestMatcher PROTECTED_URLS = new OrRequestMatcher(new AntPathRequestMatcher("api/**"));
+	private static final RequestMatcher PROTECTED_URLS = new OrRequestMatcher(new AntPathRequestMatcher("/api/**"));
 
 	CustomAuthenticationProvider provider;
 
