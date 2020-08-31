@@ -9,12 +9,12 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
   `token` varchar(100) DEFAULT NULL,
-  `group` int DEFAULT NULL,
+  `group_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_un` (`email`),
-  KEY `users_FK` (`group`),
-  CONSTRAINT `users_FK` FOREIGN KEY (`group`) REFERENCES `ugroups` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `users_FK` (`group_id`),
+  CONSTRAINT `users_FK` FOREIGN KEY (`group_id`) REFERENCES `ugroups` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- ums.ugroups definition

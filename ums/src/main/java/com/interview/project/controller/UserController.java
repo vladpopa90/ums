@@ -19,6 +19,7 @@ import com.interview.project.dao.UserMapper;
 import com.interview.project.model.User;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 	@Autowired
 	private UserMapper userMapper;
@@ -26,13 +27,11 @@ public class UserController {
 	@Autowired
 	UserAuthService userService;
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping(value = "api/users")
 	public List<User> getUsers() {
 		return userMapper.findAllUsers();
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping("/login")
 	public String login(@RequestBody User user) {
 		String token = userService.login(user.getEmail(), user.getPassword());
@@ -42,7 +41,6 @@ public class UserController {
 		return token;
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "api/user", produces = "application/json;", method = RequestMethod.GET)
 	@ResponseBody
 	public User currentUserName(@RequestHeader(name = "Authorization") String token) {
@@ -54,7 +52,6 @@ public class UserController {
 		return currentUser;
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "api/deleteUser/{id}", method = RequestMethod.GET)
 	public boolean deleteUser(@PathVariable("id") int id) {
 		try {
@@ -66,7 +63,6 @@ public class UserController {
 		}
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "api/addUser")
 	public boolean addUser(@RequestBody User user) {
 		try {
@@ -78,7 +74,6 @@ public class UserController {
 		}
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "api/changeUserGroup")
 	public boolean chnageUserGroup(@RequestBody User user) {
 		try {
