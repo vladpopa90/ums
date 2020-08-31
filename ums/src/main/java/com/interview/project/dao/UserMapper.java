@@ -40,10 +40,11 @@ public interface UserMapper {
     })
 	User findUserByToken(String token);
 
-	@Select("select id, first_name, last_name, email, password from users")
+	@Select("select * from users")
 	@Results({
         @Result(property = "firstName", column = "first_name"),
-        @Result(property = "lastName", column = "last_name")
+        @Result(property = "lastName", column = "last_name"),
+        @Result(property = "groupId", column = "group_id")
     })
 	List<User> findAllUsers();
 	
@@ -57,8 +58,8 @@ public interface UserMapper {
 	@Update("UPDATE users SET token=#{token} WHERE id=#{id}")
 	void updateToken(String token, int id);
 	
-	@Update("UPDATE users SET token=#{token} WHERE id=#{id}")
-	void updateGroup(int groupid, int id);
+	@Update("UPDATE users SET group_id=#{groupId} WHERE id=#{id}")
+	void updateGroup(int id, int groupId);
 	
 	@Delete("delete from users where id=#{id}")
 	void deleteUser(int id);

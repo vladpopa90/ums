@@ -35,8 +35,6 @@ public class UserController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping("/login")
 	public String login(@RequestBody User user) {
-//		User dbUser = userMapper.findUserByEmail(user.getEmail());
-//		return dbUser != null ? user.getPassword().equals(dbUser.getPassword()) : false;
 		String token = userService.login(user.getEmail(), user.getPassword());
 		if (StringUtils.isEmpty(token)) {
 			return "";
@@ -53,7 +51,6 @@ public class UserController {
 		if (token != null && !token.isBlank()) {
 			currentUser = userMapper.findUserByToken(token.split(" ")[1]);
 		}
-//		return currentUser != null ? currentUser.getEmail() : "";
 		return currentUser;
 	}
 
@@ -71,9 +68,21 @@ public class UserController {
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "api/addUser")
-	public boolean addGroup(@RequestBody User user) {
+	public boolean addUser(@RequestBody User user) {
 		try {
 			userMapper.insertUser(user);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(value = "api/changeUserGroup")
+	public boolean chnageUserGroup(@RequestBody User user) {
+		try {
+			userMapper.updateGroup(user.getId(), user.getGroupId());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

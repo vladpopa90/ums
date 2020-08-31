@@ -10,26 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
-//implements AuthenticationProvider {
-
-//    @Autowired
-//    private UserMapper userService;
-//
-//    @Override
-//    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-//
-//        String email = authentication.getName();
-//        String password = authentication.getCredentials().toString();
-//
-//        User user = userService.findUserByEmail(email);
-//
-//        return new UsernamePasswordAuthenticationToken(email, password, new ArrayList<>());
-//    }
-//
-//    @Override
-//    public boolean supports(Class<?> authentication) {
-//        return authentication.equals(UsernamePasswordAuthenticationToken.class);
-//    }
 
 	@Autowired
 	UserAuthService userService;

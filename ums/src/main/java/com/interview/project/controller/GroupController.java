@@ -9,24 +9,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.interview.project.dao.GroupMapper;
 import com.interview.project.model.Group;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class GroupController {
 	@Autowired
 	private GroupMapper groupMapper;
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping(value = "api/groups")
 	public List<Group> getGroups() {
 		return groupMapper.findAllGroups();
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "api/addGroup")
 	public boolean addGroup(@RequestBody Group group) {
 		try {
@@ -38,7 +36,6 @@ public class GroupController {
 		}
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value = "api/deleteGroup/{id}", method=RequestMethod.GET)
 	public boolean deleteGroup(@PathVariable("id") int id) {
 		try {
