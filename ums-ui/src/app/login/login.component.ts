@@ -1,40 +1,23 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   model: any = {};
 
   constructor(
     private router: Router,
-    private http: HttpClient
+    private authService: AuthService
   ) { }
 
-  ngOnInit() {
-    sessionStorage.setItem('token', '');
-  }
-
   login() {
-    let url = 'http://localhost:8080/login';
-
-    this.http.post(url, {
-      'email': this.model.username,
-      'password': this.model.password
-    }, { responseType: 'text' }).subscribe(token => {
-      console.log(token);
-      sessionStorage.setItem(
-        'token', token
-      );
-
-      this.router.navigate(['/home']);
-    });
+    this.authService.login(this.model.username, this.model.password).subscribe(token => { sessionStorage.setItem('token', token); this.router.navigate(['/home']) });
   }
-
 
 }

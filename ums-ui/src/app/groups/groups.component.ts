@@ -1,6 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
+import { GroupsService } from './groups.service';
+import { UserService } from '../home/user.service';
+import { User } from '../home/user';
 
 @Component({
   selector: 'app-groups',
@@ -8,61 +10,39 @@ import { Observable } from 'rxjs';
   styleUrls: ['./groups.component.css'],
 })
 export class GroupsComponent implements OnInit {
-  groups;
+  groups: any[];
   newGroupName: string;
+  users: User[];
 
-  constructor(private http: HttpClient) { }
+  constructor(private authService: AuthService, private groupService: GroupsService, private userService: UserService) { }
 
   ngOnInit(): void {
     this.getAllGroups();
+    this.getAllUsers();
   }
 
   logout() {
-    sessionStorage.setItem('token', '');
+    this.authService.logout();
   }
 
   addGroup() {
-    let url = 'http://localhost:8080/api/addGroup';
-    this.http.post(url, {
-      'name': this.newGroupName
-    }).subscribe(successfull => {
-      console.log('added group successfully.');
-      this.getAllGroups();
-    })
+    this.groupService.addGroup({ 'name': this.newGroupName }).subscribe(_ => this.getAllGroups());
   }
 
   getAllGroups() {
-    let url = 'http://localhost:8080/api/groups';
-
-    let headers: HttpHeaders = new HttpHeaders({
-      'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-    });
-
-    let options = { headers: headers };
-    this.http.get<Observable<Object[]>>(url, options).
-      subscribe(groups => {
-        this.groups = groups;
-      },
-        error => {
-          if (error.status == 401)
-            alert('Unauthorized');
-        }
-      );
+    this.groupService.getAllGroups().subscribe(grList => this.groups = grList);
   }
 
   removeGroup(id) {
-    let url = 'http://localhost:8080/api/deleteGroup/' + id;
-
-    let headers: HttpHeaders = new HttpHeaders({
-      'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-    });
-
-    let options = { headers: headers };
-    this.http.get<Observable<Object[]>>(url, options).
-      subscribe(successfull => {
-        console.log('removed group successfully.');
-        this.getAllGroups();
-      })
+    this.groupService.deleteGroup(id).subscribe(_ => this.getAllGroups());
   }
 
+  getAllUsers() {
+    this.userService.getAllUsers().subscribe(usrList => {this.users = usrList; console.log(usrList)});
+  }
+
+  changeUserGroup(user: User) {
+    console.log(user);
+    this.userService.changeUserGroup(user).subscribe();
+  }
 }

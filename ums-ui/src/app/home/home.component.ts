@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
+import { UserService } from './user.service';
 import { User } from './user';
 
 @Component({
@@ -10,86 +10,30 @@ import { User } from './user';
 })
 export class HomeComponent implements OnInit {
 
-    userName: string;
-    currentUser;
-    users;
-    model = new User("", "", "", "");
+    currentUser: User;
+    users: User[];
+    model = new User("", "", "", "", 0);
 
-    constructor(private http: HttpClient) { }
+    constructor(private authService: AuthService, private homeService: UserService) { }
 
     ngOnInit() {
-        let url = 'http://localhost:8080/api/user';
-
-        let headers: HttpHeaders = new HttpHeaders({
-            'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-        });
-
-        let options = { headers: headers };
-        this.http.get<Observable<Object>>(url, options).
-            subscribe(user => {
-                this.userName = user['firstName'];
-                this.currentUser = user;
-                this.getAllUsers();
-            },
-                error => {
-                    if (error.status == 401)
-                        alert('Unauthorized');
-                }
-            );
+        this.homeService.getCurrentUser().subscribe(usr => { this.currentUser = usr; this.getAllUsers(); });
     }
 
     logout() {
-        sessionStorage.setItem('token', '');
+        this.authService.logout();
     }
 
     onNewUserSubmit() {
-        let url = 'http://localhost:8080/api/addUser';
+        this.homeService.addUser(this.model).subscribe(_ => this.getAllUsers());
 
-        let headers: HttpHeaders = new HttpHeaders({
-            'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-        });
-
-        let options = { headers: headers };
-        this.http.post(url, this.model, options
-        ).subscribe(successfull => {
-            console.log('added user successfully.');
-            this.getAllUsers();
-        })
     }
 
     getAllUsers() {
-        let url = 'http://localhost:8080/api/users';
-
-        let headers: HttpHeaders = new HttpHeaders({
-            'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-        });
-
-        let options = { headers: headers };
-        this.http.get<Observable<Object[]>>(url, options).
-            subscribe(users => {
-                this.users = users;
-            },
-                error => {
-                    if (error.status == 401)
-                        alert('Unauthorized');
-                }
-            );
+        this.homeService.getAllUsers().subscribe(usrList => this.users = usrList);
     }
 
     removeUser(id) {
-        let url = 'http://localhost:8080/api/deleteUser/' + id;
-
-        let headers: HttpHeaders = new HttpHeaders({
-            'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-        });
-
-        let options = { headers: headers };
-        this.http.get<Observable<Object[]>>(url, options).
-            subscribe(successfull => {
-                console.log('removed user successfully.');
-                this.getAllUsers();
-            })
+        this.homeService.deleteUser(id).subscribe(_ => this.getAllUsers());
     }
-
-
 }

@@ -6,7 +6,24 @@
 </div>
 
 <ul>
+    <h2>Group List:</h2>
     <li *ngFor="let group of groups">{{group.name}}<button (click)="removeGroup(group.id)">Remove</button></li>
 </ul>
+
+
+<div *ngIf="users">
+    <h2>User Group Assignment:</h2>
+    <ul>
+        <li *ngFor="let user of users">{{user.firstName}} {{user.lastName}}
+            <select [(ngModel)]="user.groupId">
+                <option *ngFor="let group of groups" [ngValue]="group.id">
+                   {{group.name}}
+                </option>
+             </select>
+            <button (click)="changeUserGroup(user)">Update Group</button>
+        </li>
+    </ul>
+</div>
+
 
 <p><a [routerLink]="['/login']" (click)="logout()">Logout</a></p>

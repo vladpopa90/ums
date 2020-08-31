@@ -1,31 +1,26 @@
-// import { Injectable } from '@angular/core';
-// import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-// @Injectable()
-// export class AuthService {
+@Injectable({ providedIn: 'root' })
+export class AuthService {
 
-//   authenticated = false;
-//   token = "";
+    LOGIN_URL = 'http://localhost:8080/login';
 
-//   login() {
-//     let url = 'http://localhost:8080/login';
+    constructor(private http: HttpClient) { }
 
-//     this.http.post(url, {
-//       'email': this.model.username,
-//       'password': this.model.password
-//     }, { responseType: 'text' }).subscribe(token => {
-//       console.log(token);
-//       sessionStorage.setItem(
-//         'token', token
-//       );
-//       this.token = token;
+    login(username, password) {
+        return this.http.post(this.LOGIN_URL, {
+            'email': username,
+            'password': password
+        }, { responseType: 'text' });
+    }
 
-      
-//     });
-//   }
+    logout(): void {
+        sessionStorage.setItem('token', '');
+    }
 
-//   logout(): void {
-//     this.authenticated = false;
-//   }
+    isAuthenticated(): boolean {
+        return (sessionStorage.getItem('token')) ? true : false;
+    }
 
-// }
+}
